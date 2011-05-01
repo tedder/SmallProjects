@@ -36,6 +36,8 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import net.inervo.output.RSS;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -83,7 +85,7 @@ public class TwilterDOM {
 		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
 		DocumentBuilder db = dbf.newDocumentBuilder();
 
-		RSSOutput rss = new RSSOutput( "tedder42's filtered twitter", "tedder42's filtered twitter", "http://twitter.com/tedder42/" );
+		RSS rss = new RSS( "tedder42's filtered twitter", "tedder42's filtered twitter", "http://twitter.com/tedder42/" );
 
 		// parse using builder to get DOM representation of the XML file
 		dom = db.parse( is );

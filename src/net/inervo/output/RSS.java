@@ -1,4 +1,4 @@
-package net.inervo.twitter;
+package net.inervo.output;
 
 /*
  * Copyright (c) 2011, Ted Timmons, Inervo Networks
@@ -31,10 +31,10 @@ import java.util.Date;
 import org.apache.commons.digester.rss.Channel;
 import org.apache.commons.digester.rss.Item;
 
-public class RSSOutput {
+public class RSS {
 	Channel newChannel;
 
-	public RSSOutput( String title, String description, String url ) {
+	public RSS( String title, String description, String url ) {
 		prepareFeed( title, description, url );
 	}
 
