@@ -29,7 +29,11 @@ public class AmazonEmail {
 	Transport transport = null;
 
 	public AmazonEmail() throws FileNotFoundException, IllegalArgumentException, IOException, MessagingException {
-		credentials = new PropertiesCredentials( new File( "AwsCredentials.properties" ) );
+		this( new File( "AwsCredentials.properties" ) );
+	}
+
+	public AmazonEmail( File propFile ) throws FileNotFoundException, IllegalArgumentException, IOException, MessagingException {
+		credentials = new PropertiesCredentials( propFile );
 		email = new AmazonSimpleEmailServiceClient( credentials );
 
 		init();

@@ -1,6 +1,7 @@
 package net.inervo.data;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,20 +23,13 @@ public class Keystore {
 	String itemKey = null;
 
 	public Keystore( String itemKey ) throws IOException {
-		sdb = new AmazonSimpleDBClient( new PropertiesCredentials( new File( "AwsCredentials.properties" ) ) );
-		createDataDomainIfNecessary( DEFAULT_DATA_DOMAIN );
-		this.itemKey = itemKey;
+		this( new File( "AwsCredentials.properties" ), itemKey );
 	}
 
-	public static void main( String[] args ) {
-		Keystore k = null;
-		try {
-			k = new Keystore( "test" );
-		} catch ( IOException e ) {
-			e.printStackTrace();
-		}
-		print( "funt: " + k.getKey( "Funtasticus update time" ) );
-
+	public Keystore( File propFile, String itemKey ) throws FileNotFoundException, IllegalArgumentException, IOException {
+		sdb = new AmazonSimpleDBClient( new PropertiesCredentials( propFile ) );
+		createDataDomainIfNecessary( DEFAULT_DATA_DOMAIN );
+		this.itemKey = itemKey;
 	}
 
 	public void replace( String key, String value ) {
@@ -61,15 +55,6 @@ public class Keystore {
 		String ret = getKey( key );
 		return ret == null ? defaultValue : ret;
 	}
-
-	// public String select( String key ) {
-	// StringBuilder selectString = new StringBuilder();
-	// String select = "SELECT * FROM %s WHERE "
-	// selectString.append("SELECT * FROM ");
-	// selectString.append(DEFAULT_DATA_DOMAIN);
-	// selectString.append("")
-	// sdb.select( new SelectRequest( "").withNextToken(key) )
-	// }
 
 	public void put( String key, String value, boolean replace ) {
 		List<ReplaceableAttribute> values = new ArrayList<ReplaceableAttribute>();
@@ -98,7 +83,4 @@ public class Keystore {
 		return exists;
 	}
 
-	private static void print( String s ) {
-		System.out.println( s );
-	}
 }

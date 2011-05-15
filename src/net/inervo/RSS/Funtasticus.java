@@ -1,5 +1,6 @@
 package net.inervo.RSS;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
@@ -44,13 +45,20 @@ public class Funtasticus {
 		readFeed();
 	}
 
+	public Funtasticus( File propFile ) throws Exception {
+		openKeystore( propFile, "Funtasticus" );
+		emailer = new AmazonEmail( propFile );
+		getLastUpdateTime();
+		readFeed();
+	}
+
 	public void readFeed() throws IOException, ParserConfigurationException, SAXException, AddressException, MessagingException {
 		InputStream is = this.getRSS( FEED_URL );
 		List<Item> items = parseFeed( is );
 		StringBuilder body = new StringBuilder();
 
 		if ( items == null || items.size() == 0 ) {
-			print("no items in feed, we're outta.");
+			print( "no items in feed, we're outta." );
 			return;
 		}
 		for ( Item item : items ) {
@@ -132,6 +140,14 @@ public class Funtasticus {
 		return nodeMap;
 	}
 
+	public void openKeystore( File propFile, String itemKey ) throws Exception {
+		try {
+			keystore = new Keystore( propFile, itemKey );
+		} catch ( IOException e ) {
+			throw new Exception( "Error getting AWS key: " + e.getLocalizedMessage() );
+		}
+	}
+	
 	public void openKeystore( String itemKey ) throws Exception {
 		try {
 			keystore = new Keystore( itemKey );
@@ -158,7 +174,7 @@ public class Funtasticus {
 	}
 
 	public void setLastUpdateTime() {
-		 keystore.replace( UPDATE_TIME_KEY, getUpdateTimeString() );
+		keystore.replace( UPDATE_TIME_KEY, getUpdateTimeString() );
 	}
 
 	/**
@@ -166,9 +182,16 @@ public class Funtasticus {
 	 * @throws Exception
 	 */
 	public static void main( String[] args ) throws Exception {
-		Funtasticus f = new Funtasticus();
-		f.setLastUpdateTime();
+		Funtasticus f = null;
 
+		if ( args.length > 0 ) {
+			File file = new File( args[0] );
+			f = new Funtasticus( file );
+		} else {
+			f = new Funtasticus();
+		}
+
+		f.setLastUpdateTime();
 	}
 
 	private static void print( String s ) {
