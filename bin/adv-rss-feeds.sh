@@ -7,7 +7,7 @@ outdir=$3
 
 # windows XP, Firefox 10.
 UA="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.8.1.6) Gecko/20100101 Firefox/10.0"
-curl="/usr/bin/curl --silent --cookie-jar ~/.advrider.cookies --user-agent \"$UA\" --referer http://lemonparty.org/"
+curl="curl --silent --cookie-jar ~/.advrider.cookies --user-agent \"$UA\" --referer http://lemonparty.org/"
 
 $curl "http://advrider.com/forums/login.php?do=login&vb_login_username=${user}&vb_login_password=${pass}&submit=Login"
 
